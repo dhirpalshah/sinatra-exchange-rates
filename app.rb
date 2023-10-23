@@ -6,7 +6,7 @@ require "http"
 get("/") do
 
   # build the API url, including the API key in the query string
-  api_url = "https://api.exchangerate.host/list?access_key=#{ENV["exchange_token"]}"
+  api_url = "https://api.exchangerate.host/list?access_key=insertkey"
 
   # use HTTP.get to retrieve the API information
   raw_data = HTTP.get(api_url)
@@ -18,10 +18,10 @@ get("/") do
   parsed_data = JSON.parse(raw_data_string)
 
   # get the symbols from the JSON
-  @symbols = parsed_data{"currencies"}
+  @symbols = parsed_data["currencies"]
 
   @html_list_items = ""
-  currencies_hash.each do |code, name|
+  @symbols.each do |code, name|
     @html_list_items += "<li><a href=\"/#{code}\">Convert 1 #{code} to...</a></li>\n"
   end
 
@@ -33,16 +33,32 @@ end
 get("/:from_currency") do
   @original_currency = params.fetch("from_currency")
 
-  api_url = "https://api.exchangerate.host/list?access_key=#{ENV["exchange_token"]}"
+  api_url = "https://api.exchangerate.host/live?access_key=insertkey"
+  raw_data = HTTP.get(api_url)
+  raw_data_string = raw_data.to_s
+  @parsed_data = JSON.parse(raw_data_string)
+
+  @source = @parsed_data["source"]
+  quotes = @parsed_data["quotes"]
+
+  @html_list_items = ""
+  quotes.each do |target_currency, rate|
+    target = target_currency[3..-1]
+    @html_list_items += "<li><a href=\"/#{@original_currency}/#{target}\">Convert 1 #{@original_currency} to #{target}...</a></li>\n"
+  end
   
-  # some more code to parse the URL and render a view template
+  erb(:from_currency)
 end
 
 get("/:from_currency/:to_currency") do
   @original_currency = params.fetch("from_currency")
   @destination_currency = params.fetch("to_currency")
 
-  api_url = "https://api.exchangerate.host/convert?access_key=#{ENV["exchange_token"]}&from=#{@original_currency}&to=#{@destination_currency}&amount=1"
-  
-  # some more code to parse the URL and render a view template
+  api_url = "https://api.exchangerate.host/convert?access_key=insertkey&from=#{@original_currency}&to=#{@destination_currency}&amount=1"
+  raw_data = HTTP.get(api_url)
+  raw_data_string = raw_data.to_s
+  @parsed_data = JSON.parse(raw_data_string)
+  @amount = @parsed_data["info"]["quote"].to_s
+
+  erb(:to_currency)
 end

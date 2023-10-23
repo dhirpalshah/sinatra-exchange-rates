@@ -6,6 +6,8 @@ ruby "3.2.1"
 gem "sinatra"
 gem "sinatra-reloader"
 gem "sinatra-contrib"
+gem "rack"
+gem "dotenv-rails"
 
 # Use Puma as the app server
 gem "puma", "~> 5.0"
