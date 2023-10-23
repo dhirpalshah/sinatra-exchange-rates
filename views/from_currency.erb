@@ -1,7 +1,11 @@
 <h1>Convert <%= @original_currency %></h1>
 
-<p> <a href="/">Go back</a> <p>
-
+<p> Go <a href="/">back</a>. <p>
+<%= @symbols.inspect%>
 <ul>
-  <%= @html_list_items %>
+  <% @symbols.each do |code|  %>
+  <li> 
+    <%= code %>
+   </li>
+  <%end%>
 </ul>

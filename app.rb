@@ -18,12 +18,12 @@ get("/") do
   parsed_data = JSON.parse(raw_data_string)
 
   # get the symbols from the JSON
-  @symbols = parsed_data["currencies"]
+  @symbols = parsed_data["currencies"].keys
 
-  @html_list_items = ""
-  @symbols.each do |code, name|
-    @html_list_items += "<li><a href=\"/#{code}\">Convert 1 #{code} to...</a></li>\n"
-  end
+  # @html_list_items = ""
+  # @symbols.each do |code, name|
+  #   @html_list_items += "<li><a href=\"/#{code}\">Convert 1 #{code} to...</a></li>\n"
+  # end
 
   # render a view template where I show the symbols
   erb(:homepage)
