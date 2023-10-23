@@ -33,19 +33,12 @@ end
 get("/:from_currency") do
   @original_currency = params.fetch("from_currency")
 
-  api_url = "https://api.exchangerate.host/live?access_key=#{ENV['EXCHANGE_TOKEN']}"
+  api_url = "https://api.exchangerate.host/list?access_key=#{ENV['EXCHANGE_TOKEN']}"
   raw_data = HTTP.get(api_url)
   raw_data_string = raw_data.to_s
-  @parsed_data = JSON.parse(raw_data_string)
+  parsed_data = JSON.parse(raw_data_string)
 
-  @source = @parsed_data["source"]
-  quotes = @parsed_data["quotes"]
-
-  @html_list_items = ""
-  quotes.each do |target_currency, rate|
-    target = target_currency[3..-1]
-    @html_list_items += "<li><a href=\"/#{@original_currency}/#{target}\">Convert 1 #{@original_currency} to #{target}...</a></li>\n"
-  end
+  @symbols = parsed_data["currencies"].keys
   
   erb(:from_currency)
 end
