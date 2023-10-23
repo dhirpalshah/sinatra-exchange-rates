@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby "3.2.1"
 
 gem "sinatra"
+gem "sinatra-reloader"
 gem "sinatra-contrib"
 
 # Use Puma as the app server
