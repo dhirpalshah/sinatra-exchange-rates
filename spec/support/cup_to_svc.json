@@ -6,7 +6,8 @@
     "amount":1
   },
   "info":{
-    "rate":0.339787
+    "rate":0.339787,
+    "quote":0.339787
   },
   "historical":false,
   "date":"2020-07-22",
